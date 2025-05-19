@@ -7,7 +7,7 @@ const ThemeToggle = () => {
     if (storedTheme) return storedTheme;
 
     const prefersDark = window.matchMedia(
-      "(prefers-color-scheme: dark)"
+      "(prefers-color-scheme: light)"
     ).matches;
     return prefersDark ? "dark" : "light";
   });
