@@ -8,6 +8,7 @@ import EmployeeDetails from "./pages/EmployeeDetails";
 import Locations from "./pages/Locations";
 import Departments from "./pages/Departments";
 import CompanyAttendance from "./pages/CompanyAttendance";
+import LocationAttendanceDetails from "./pages/LocationAttendanceDetails";
 import Profile from "./pages/Profile";
 import SidebarLayout from "./components/SidebarLayout";
 function App() {
@@ -29,6 +30,7 @@ function App() {
           <Route path="locations" element={<Locations />} />
           <Route path="departments" element={<Departments />} />
           <Route path="company-attendance" element={<CompanyAttendance />} />
+          <Route path="company-attendance/location/:id" element={<LocationAttendanceDetails />} />
           <Route path="profile" element={<Profile />} />
         </Route>
       )}

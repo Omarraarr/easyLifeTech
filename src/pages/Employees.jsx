@@ -1,9 +1,13 @@
 import { useEffect, useState, useMemo } from "react";
 import { useNavigate } from "react-router-dom";
+import { IoImagesOutline } from "react-icons/io5";
+import { CiLocationOn } from "react-icons/ci";
+import { Plus, X } from "lucide-react";
+
 import axios from "axios";
 import SearchFilters from "../components/SearchFilters";
 
-const EMPLOYEES_PER_PAGE = 5;
+const EMPLOYEES_PER_PAGE = 12;
 
 const Employees = () => {
   const [employees, setEmployees] = useState([]);
@@ -25,6 +29,7 @@ const Employees = () => {
   const [searchQuery, setSearchQuery] = useState("");
   const [loading, setLoading] = useState(true);
   const [currentPage, setCurrentPage] = useState(1);
+  const [showForm, setShowForm] = useState(false);
 
   const navigate = useNavigate();
 
@@ -32,12 +37,15 @@ const Employees = () => {
     try {
       const token = localStorage.getItem("token");
       const [usersRes, deptRes, locRes] = await Promise.all([
-        axios.get("https://aa-v2.abdullahkhaled.com/api/v1/auth/users?per_page=1000", {
-          headers: {
-            Accept: "application/json",
-            "Content-Type": "multipart/form-data",
-          },
-        }),
+        axios.get(
+          "https://aa-v2.abdullahkhaled.com/api/v1/auth/users?per_page=1000",
+          {
+            headers: {
+              Accept: "application/json",
+              "Content-Type": "multipart/form-data",
+            },
+          }
+        ),
         axios.get("https://aa-v2.abdullahkhaled.com/api/v1/departments?", {
           headers: {
             Accept: "application/json",
@@ -145,7 +153,7 @@ const Employees = () => {
 
   return (
     <div>
-      <h1 className="text-xl font-bold mb-4">Employees</h1>
+      <h1 className="text-xl font-bold text-primary mb-4">Employees</h1>
 
       {/* Filters */}
       <SearchFilters
@@ -169,9 +177,10 @@ const Employees = () => {
       />
 
       {/* Add Employee Form */}
-      <form
+      {showForm && (
+              <form
         onSubmit={handleAddEmployee}
-        className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 p-4 border rounded bg-gray-50 dark:bg-gray-800"
+        className="mb-6 grid grid-cols-1 md:grid-cols-2 gap-4 p-4  dark:bg-gray-800 bg-white border border-gray-200 rounded-lg shadow-sm  hover:shadow-md transition duration-300"
       >
         {[
           ["text", "name", "Name"],
@@ -187,7 +196,7 @@ const Employees = () => {
             value={formData[name]}
             onChange={handleInputChange}
             placeholder={placeholder}
-            className="p-2 border rounded"
+            className="p-2 text-text-secondary bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300"
             required
           />
         ))}
@@ -195,7 +204,7 @@ const Employees = () => {
           name="department_id"
           value={formData.department_id}
           onChange={handleInputChange}
-          className="p-2 border rounded"
+          className="p-2 text-text-secondary  bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300 "
           required
         >
           <option value="">Select Department</option>
@@ -209,7 +218,7 @@ const Employees = () => {
           name="attendance_location_id"
           value={formData.attendance_location_id}
           onChange={handleInputChange}
-          className="p-2 border rounded"
+          className="p-2 text-text-secondary bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300"
           required
         >
           <option value="">Select Location</option>
@@ -223,7 +232,7 @@ const Employees = () => {
           name="type"
           value={formData.type}
           onChange={handleInputChange}
-          className="p-2 border rounded"
+          className="p-2 text-text-secondary bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300"
           required
         >
           <option value="">Select Type</option>
@@ -234,7 +243,7 @@ const Employees = () => {
           name="gender"
           value={formData.gender}
           onChange={handleInputChange}
-          className="p-2 border rounded"
+          className="p-2 text-text-secondary bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300"
           required
         >
           <option value="">Select Gender</option>
@@ -243,36 +252,62 @@ const Employees = () => {
         </select>
         <button
           type="submit"
-          className="col-span-1 md:col-span-2 p-2 bg-blue-600 text-white rounded hover:bg-blue-700"
+          className="col-span-1 md:col-span-2 p-2 bg-primary text-white rounded hover:bg-secondary transition duration-300"
         >
           Add Employee
         </button>
       </form>
+      )}
+
 
       {/* Employee List */}
-      {paginatedEmployees.length === 0 ? (
-        <p>No employees found.</p>
-      ) : (
-        <ul className="space-y-4">
-          {paginatedEmployees.map((employee) => (
-            <div
-              key={employee.id}
-              className="border rounded p-4 shadow hover:bg-gray-100 cursor-pointer"
-              onClick={() => navigate(`/employees/${employee.id}`)}
-            >
-              <img
-                src={employee.image}
-                alt={employee.name}
-                className="w-24 h-24 object-cover rounded-full mb-2"
-              />
-              <p className="text-lg font-medium">{employee.name}</p>
-              <p className="text-sm text-gray-500">
-                {employee.department?.name}
-              </p>
+      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+        {paginatedEmployees.map((employee) => (
+          <li
+            key={employee.id}
+            onClick={() => navigate(`/employees/${employee.id}`)}
+            className="w-full max-w-sm bg-white border border-gray-200 rounded-lg shadow-sm cursor-pointer hover:shadow-md transition duration-300"
+          >
+            {/* Top right: Department badge */}
+            <div className="flex justify-end px-4 pt-4">
+              <span className="text-sm text-white bg-primary px-3 py-1 rounded-full">
+                {employee.department?.name || "—"}
+              </span>
             </div>
-          ))}
-        </ul>
-      )}
+
+            {/* Center content */}
+            <div className="flex flex-col items-center pb-6 px-4">
+              {employee.image ? (
+                <img
+                  className="w-24 h-24 mb-3 rounded-full shadow-lg object-cover"
+                  src={`https://aa-v2.abdullahkhaled.com/storage/${employee.image}`}
+                  alt={employee.name}
+                />
+              ) : (
+                <div className="w-24 h-24 mb-3 rounded-full shadow-lg bg-gray-200 flex items-center justify-center">
+                  <IoImagesOutline className="text-gray-500 w-12 h-12" />
+                </div>
+              )}
+              <h5 className="mb-1 text-xl font-medium text-gray-900">
+                {employee.name}
+              </h5>
+              <span className="text-sm text-gray-500 mb-2">
+                Code: {employee.code}
+              </span>
+              <span className="text-sm text-gray-500 flex row">
+                <CiLocationOn /> {employee.attendance_location?.name || "—"}{" "}
+              </span>
+            </div>
+          </li>
+        ))}
+      </ul>
+
+      <button
+        onClick={() => setShowForm(!showForm)}
+        className="fixed bottom-6 right-6 bg-green-600 hover:bg-green-700 text-white p-3 rounded-full shadow-lg z-50"
+      >
+        {!showForm ? <Plus size={24} /> : <X size={24} />}
+      </button>
 
       {/* Pagination Controls */}
       {totalPages > 1 && (

@@ -193,80 +193,85 @@ const Locations = () => {
       {locations.length === 0 ? (
         <p>No locations found.</p>
       ) : (
-        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-4">
-          {locations.map((location) => (
-            <li
-              key={location.id}
-              className="p-4 bg-white dark:bg-gray-700 rounded shadow text-center relative"
-            >
-              {location.image && (
-                <img
-                  src={`https://aa-v2.abdullahkhaled.com/storage/${location.image}`}
-                  alt={location.name}
-                  className="w-full h-40 object-cover rounded mb-2"
-                />
-              )}
+        <ul className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6">
+  {locations.map((location) => (
+    <li
+      key={location.id}
+      className="bg-white dark:bg-gray-800 rounded-2xl shadow-md overflow-hidden flex flex-col justify-between transition-transform hover:scale-[1.01]"
+    >
+      {location.image && (
+        <img
+          src={`https://aa-v2.abdullahkhaled.com/storage/${location.image}`}
+          alt={location.name}
+          className="w-full h-40 object-cover"
+        />
+      )}
 
-              {editingId === location.id ? (
-                <div className="space-y-2">
-                  <input
-                    type="text"
-                    name="name"
-                    value={editData.name}
-                    onChange={handleEditChange}
-                    className="w-full p-1 border rounded"
-                    placeholder="Name"
-                  />
-                  <input
-                    type="text"
-                    name="attendace_zone"
-                    value={editData.attendace_zone}
-                    onChange={handleEditChange}
-                    className="w-full p-1 border rounded"
-                    placeholder="Attendance Zone"
-                  />
-                  <div className="space-x-2 mt-2">
-                    <button
-                      onClick={() => handleEditSave(location.id)}
-                      className="px-3 py-1 bg-green-600 text-white text-sm rounded hover:bg-green-700"
-                    >
-                      Save
-                    </button>
-                    <button
-                      onClick={() => setEditingId(null)}
-                      className="px-3 py-1 bg-gray-400 text-white text-sm rounded hover:bg-gray-500"
-                    >
-                      Cancel
-                    </button>
-                  </div>
-                </div>
-              ) : (
-                <>
-                  <p className="font-semibold">{location.name}</p>
-                  <p className="text-sm text-gray-500">
-                    {location.attendace_zone}
-                  </p>
-                  <div className="mt-2 flex justify-center gap-3">
-                    <button
-                      onClick={() => startEditing(location)}
-                      className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-blue-600 hover:text-blue-800 transition"
-                      title="Edit"
-                    >
-                      <Pencil size={18} />
-                    </button>
-                    <button
-                      onClick={() => handleDelete(location.id)}
-                      className="bg-gray-200 hover:bg-gray-300 p-2 rounded-full text-red-600 hover:text-red-800 transition"
-                      title="Delete"
-                    >
-                      <Trash size={18} />
-                    </button>
-                  </div>
-                </>
-              )}
-            </li>
-          ))}
-        </ul>
+      <div className="p-4 space-y-2">
+        {editingId === location.id ? (
+          <>
+            <input
+              type="text"
+              name="name"
+              value={editData.name}
+              onChange={handleEditChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Name"
+            />
+            <input
+              type="text"
+              name="attendace_zone"
+              value={editData.attendace_zone}
+              onChange={handleEditChange}
+              className="w-full px-3 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+              placeholder="Attendance Zone"
+            />
+            <div className="flex justify-end gap-2 pt-2">
+              <button
+                onClick={() => handleEditSave(location.id)}
+                className="px-4 py-1.5 bg-green-600 text-white text-sm rounded-lg hover:bg-green-700 transition"
+              >
+                Save
+              </button>
+              <button
+                onClick={() => setEditingId(null)}
+                className="px-4 py-1.5 bg-gray-400 text-white text-sm rounded-lg hover:bg-gray-500 transition"
+              >
+                Cancel
+              </button>
+            </div>
+          </>
+        ) : (
+          <>
+            <h3 className="text-lg font-semibold text-gray-800 dark:text-white">
+              {location.name}
+            </h3>
+            <p className="text-sm text-gray-600 dark:text-gray-300">
+              {location.attendace_zone}
+            </p>
+            <div className="mt-3 flex justify-center gap-3">
+              <button
+                onClick={() => startEditing(location)}
+                className="p-2 rounded-full bg-gray-100 hover:bg-blue-100 text-blue-600 hover:text-blue-800 transition"
+                title="Edit"
+              >
+                <Pencil size={18} />
+              </button>
+              <button
+                onClick={() => handleDelete(location.id)}
+                className="p-2 rounded-full bg-gray-100 hover:bg-red-100 text-red-600 hover:text-red-800 transition"
+                title="Delete"
+              >
+                <Trash size={18} />
+              </button>
+            </div>
+          </>
+        )}
+      </div>
+    </li>
+  ))}
+</ul>
+
       )}
 
       {/* Floating Add Button */}
