@@ -67,7 +67,7 @@ const SidebarLayout = () => {
           </div>
           <button
             onClick={handleLogout}
-            className="flex items-center justify-center sm:justify-start gap-2 w-full text-md text-[#1A7DC1] border border-[#1A7DC1] px-3 py-2 rounded-full hover:bg-delete hover:border-delete hover:text-white transition"
+            className="flex items-center justify-center sm:justify-start gap-2 w-full text-md text-primary border border-primary px-3 py-2 rounded-full hover:bg-delete hover:border-delete hover:text-white transition"
           >
             <FiLogOut />
             <span className="hidden sm:inline">Logout</span>
